@@ -6,6 +6,7 @@ import org.apache.http.client.HttpClient;
 import org.muslim.factories.DependencyFactory;
 import org.muslim.models.Request;
 import org.muslim.models.Response;
+import org.muslim.providers.PrayerTimeProvider;
 import software.amazon.awssdk.services.config.ConfigClient;
 
 /**
@@ -16,15 +17,14 @@ import software.amazon.awssdk.services.config.ConfigClient;
  */
 public class PrayerTimesRequestHandler implements RequestHandler<Request, Response> {
 
-    private final HttpClient httpClient;
+    private final PrayerTimeProvider prayerTimeProvider;
 
     public PrayerTimesRequestHandler() {
-        this.httpClient = DependencyFactory.httpClient();
+        this.prayerTimeProvider = DependencyFactory.alAdhanPrayerTimeProvider();
     }
 
     @Override
-    public Response handleRequest(Request request, final Context context) {
-        // TODO: invoking the api call using configClient.
-        return new Response(200);
+    public Response handleRequest(Request request, Context context) {
+        return prayerTimeProvider.getPrayerTime(request);
     }
 }

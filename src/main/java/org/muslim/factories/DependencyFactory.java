@@ -4,6 +4,8 @@ package org.muslim.factories;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.muslim.PrayerTimesRequestHandler;
+import org.muslim.providers.AlAdhanPrayerTimeProvider;
+import org.muslim.providers.PrayerTimeProvider;
 import software.amazon.awssdk.auth.credentials.EnvironmentVariableCredentialsProvider;
 import software.amazon.awssdk.core.SdkSystemSetting;
 import software.amazon.awssdk.http.urlconnection.UrlConnectionHttpClient;
@@ -14,6 +16,8 @@ import software.amazon.awssdk.services.config.ConfigClient;
  * The module containing all dependencies required by the {@link PrayerTimesRequestHandler}.
  */
 public class DependencyFactory {
+
+    private static final HttpClient HTTP_CLIENT = HttpClients.createMinimal();
 
     private DependencyFactory() {}
 
@@ -28,8 +32,8 @@ public class DependencyFactory {
                        .build();
     }
 
-    public static HttpClient httpClient() {
-        return HttpClients.createMinimal();
+    public static PrayerTimeProvider alAdhanPrayerTimeProvider() {
+        return new AlAdhanPrayerTimeProvider(HTTP_CLIENT);
     }
 
 
